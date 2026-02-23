@@ -12,37 +12,80 @@ const isPlaceholder = (value) => {
   );
 };
 
+const getConfiguredAuth = () => {
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASS;
+
+  if (smtpUser && smtpPass && !isPlaceholder(smtpUser) && !isPlaceholder(smtpPass)) {
+    return { user: smtpUser, pass: smtpPass };
+  }
+
+  if (emailUser && emailPass && !isPlaceholder(emailUser) && !isPlaceholder(emailPass)) {
+    return { user: emailUser, pass: emailPass };
+  }
+
+  return null;
+};
+
+const getFromAddress = () => {
+  const configuredFrom = process.env.EMAIL_FROM?.trim();
+  if (configuredFrom) {
+    return configuredFrom;
+  }
+
+  const auth = getConfiguredAuth();
+  if (auth?.user) {
+    return auth.user;
+  }
+
+  return process.env.EMAIL_USER;
+};
+
 const getTransporter = () => {
   if (transporter) {
     return transporter;
   }
 
-  if (
-    !process.env.EMAIL_USER ||
-    !process.env.EMAIL_PASS ||
-    isPlaceholder(process.env.EMAIL_USER) ||
-    isPlaceholder(process.env.EMAIL_PASS)
-  ) {
-    throw new Error('Email service is not configured. Set valid EMAIL_USER and EMAIL_PASS.');
+  const auth = getConfiguredAuth();
+  if (!auth) {
+    throw new Error(
+      'Email service is not configured. Set SMTP_USER/SMTP_PASS or EMAIL_USER/EMAIL_PASS.'
+    );
   }
 
-  transporter = nodemailer.createTransport({
-    service: 'gmail',
-    connectionTimeout: 5000,
-    greetingTimeout: 5000,
-    socketTimeout: 7000,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
-  });
+  const smtpHost = process.env.SMTP_HOST?.trim();
+  if (smtpHost) {
+    const smtpPort = Number(process.env.SMTP_PORT || 587);
+    const smtpSecure = String(process.env.SMTP_SECURE || '').toLowerCase() === 'true';
+
+    transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure,
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 7000,
+      auth
+    });
+  } else {
+    // Backward-compatible fallback for existing Gmail setup.
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 7000,
+      auth
+    });
+  }
 
   return transporter;
 };
 
 export const sendOTPEmail = async (email, otp) => {
   const mailOptions = {
-    from: `"CreatorConnect" <${process.env.EMAIL_USER}>`,
+    from: `"CreatorConnect" <${getFromAddress()}>`,
     to: email,
     subject: 'Your OTP for CreatorConnect Login',
     html: `
@@ -72,7 +115,7 @@ export const sendOTPEmail = async (email, otp) => {
 
 export const sendWelcomeEmail = async (email, name) => {
   const mailOptions = {
-    from: `"CreatorConnect" <${process.env.EMAIL_USER}>`,
+    from: `"CreatorConnect" <${getFromAddress()}>`,
     to: email,
     subject: 'Welcome to CreatorConnect!',
     html: `

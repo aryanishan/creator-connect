@@ -6,6 +6,7 @@ import {
   getUserById,
   updateProfile,
   uploadProfileAvatar,
+  getProfileStats,
   sendConnectionRequest,
   acceptConnectionRequest,
   rejectConnectionRequest,
@@ -19,6 +20,7 @@ router.use(protect);
 
 router.get('/', getUsers);
 router.get('/requests', getConnectionRequests);
+router.get('/profile/stats', getProfileStats);
 router.put('/profile', updateProfile);
 router.put('/profile/avatar', upload.single('avatar'), uploadProfileAvatar);
 router.get('/:id', getUserById);

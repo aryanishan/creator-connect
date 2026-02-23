@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiHome, FiUsers, FiMessageSquare, FiUser, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiUsers, FiMessageSquare, FiUser, FiLogOut, FiPlusSquare } from 'react-icons/fi';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -58,6 +58,14 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-right">
+          <Link
+            to="/assets/create"
+            className={`create-asset-btn ${location.pathname === '/assets/create' ? 'active' : ''}`}
+          >
+            <FiPlusSquare className="create-icon" />
+            <span>Create Asset</span>
+          </Link>
+
           <div className="user-info">
             <img
               src={user?.avatar || 'https://via.placeholder.com/40'}
@@ -66,6 +74,7 @@ const Navbar = () => {
             />
             <span className="user-name">{user?.name}</span>
           </div>
+
           <button onClick={handleLogout} className="logout-btn">
             <FiLogOut className="logout-icon" />
             <span>Logout</span>

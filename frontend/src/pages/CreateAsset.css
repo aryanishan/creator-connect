@@ -1,0 +1,90 @@
+.create-asset-page {
+  display: flex;
+  justify-content: center;
+}
+
+.create-asset-card {
+  width: min(760px, 100%);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+}
+
+.create-asset-card h1 {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  margin-bottom: 8px;
+}
+
+.create-asset-card p {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.create-asset-form {
+  display: grid;
+  gap: 14px;
+}
+
+.create-asset-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.create-asset-form span {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.create-asset-form input,
+.create-asset-form textarea,
+.create-asset-form select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: #fbfdff;
+}
+
+.create-asset-form textarea {
+  resize: vertical;
+}
+
+.create-asset-form input:focus,
+.create-asset-form textarea:focus,
+.create-asset-form select:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(15, 123, 255, 0.12);
+  background: #fff;
+}
+
+.selected-files {
+  color: #0a7a53;
+  font-size: 0.9rem;
+}
+
+.create-asset-form button {
+  border: none;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(120deg, #0fb57b 0%, #07895c 100%);
+  cursor: pointer;
+}
+
+.create-asset-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .create-asset-card {
+    border-radius: 14px;
+    padding: 16px;
+  }
+}

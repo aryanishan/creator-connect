@@ -6,6 +6,7 @@ import { Server } from 'socket.io';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
+import assetRoutes from './routes/assetRoutes.js';
 import { setupSocket } from './socket/socketHandler.js';
 import connectDB from './config/db.js';
 
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/assets', assetRoutes);
 app.get('/', (req, res) => {
   res.send('CreatorConnect API is running...');
 });

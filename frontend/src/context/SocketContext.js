@@ -25,7 +25,10 @@ export const SocketProvider = ({ children }) => {
       const newSocket = io(SOCKET_URL, {
         auth: {
           token: localStorage.getItem('token')
-        }
+        },
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 10
       });
 
       newSocket.on('connect', () => {
@@ -41,34 +44,73 @@ export const SocketProvider = ({ children }) => {
       });
 
       newSocket.on('message:received', (message) => {
+        if (message?.sender?._id === user?._id) return;
+
         toast.custom((t) => (
-          <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
-            <div className="flex-1 w-0 p-4">
-              <div className="flex items-start">
-                <div className="flex-shrink-0 pt-0.5">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={message.sender.avatar}
-                    alt=""
-                  />
-                </div>
-                <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium text-gray-900">
-                    {message.sender.name}
-                  </p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {message.content}
-                  </p>
-                </div>
+          <div
+            style={{
+              width: '320px',
+              background: '#fff',
+              border: '1px solid #d9e2ee',
+              borderRadius: '12px',
+              boxShadow: '0 12px 28px rgba(15, 31, 51, 0.18)',
+              overflow: 'hidden',
+              fontFamily: 'Manrope, Segoe UI, sans-serif'
+            }}
+          >
+            <div style={{ display: 'flex', gap: '10px', padding: '12px' }}>
+              <img
+                src={message.sender.avatar}
+                alt={message.sender.name}
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid #d5e3f2',
+                  flexShrink: 0
+                }}
+              />
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: '0.92rem',
+                    fontWeight: 700,
+                    color: '#0f1f33'
+                  }}
+                >
+                  {message.sender.name}
+                </p>
+                <p
+                  style={{
+                    margin: '3px 0 0 0',
+                    fontSize: '0.84rem',
+                    color: '#5b6d83',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  {message.content}
+                </p>
               </div>
             </div>
-            <div className="flex border-l border-gray-200">
+            <div style={{ borderTop: '1px solid #e4ebf3', display: 'flex' }}>
               <button
                 onClick={() => {
                   window.location.href = `/messages/${message.sender._id}`;
                   toast.dismiss(t.id);
                 }}
-                className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none"
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  background: 'transparent',
+                  padding: '10px 12px',
+                  fontWeight: 700,
+                  color: '#0f7bff',
+                  cursor: 'pointer'
+                }}
               >
                 Reply
               </button>

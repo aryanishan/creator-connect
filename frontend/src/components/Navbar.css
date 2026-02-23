@@ -78,6 +78,35 @@
   gap: 12px;
 }
 
+.create-asset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  text-decoration: none;
+  border-radius: 12px;
+  border: 1px solid #0e9e6d;
+  color: #076946;
+  background: #e6f8f1;
+  font-weight: 700;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.create-asset-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(15, 181, 123, 0.18);
+}
+
+.create-asset-btn.active {
+  color: white;
+  background: linear-gradient(120deg, #0fb57b 0%, #07895c 100%);
+  border-color: #07895c;
+}
+
+.create-icon {
+  font-size: 1.05rem;
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -128,6 +157,14 @@
   font-size: 1.05rem;
 }
 
+@media (max-width: 1100px) {
+  .create-asset-btn span,
+  .user-name,
+  .logout-btn span {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar-container {
     padding: 0 12px;
@@ -139,8 +176,8 @@
   }
 
   .nav-menu span,
-  .user-name,
-  .logout-btn span {
+  .logout-btn span,
+  .create-asset-btn span {
     display: none;
   }
 
@@ -153,7 +190,9 @@
     padding: 8px 10px;
   }
 
-  .nav-icon {
+  .nav-icon,
+  .create-icon,
+  .logout-icon {
     font-size: 1.2rem;
   }
 
@@ -161,11 +200,12 @@
     gap: 6px;
   }
 
+  .create-asset-btn,
   .logout-btn {
     padding: 8px 10px;
   }
 
-  .logout-icon {
-    font-size: 1.2rem;
+  .user-info {
+    display: none;
   }
 }

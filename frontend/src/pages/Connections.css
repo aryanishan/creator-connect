@@ -2,154 +2,158 @@
   animation: fadeIn 320ms ease-out;
 }
 
-.connections-header {
-  text-align: center;
-  margin-bottom: 18px;
+.connections-title {
+  font-size: clamp(1.65rem, 4vw, 2.2rem);
+  margin-bottom: 14px;
 }
 
-.page-title {
-  font-size: clamp(1.65rem, 4vw, 2.3rem);
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.page-subtitle {
-  color: var(--muted);
-  font-size: 0.98rem;
-}
-
-.connections-grid {
+.connections-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
-.connection-card {
+.panel {
   background: var(--card);
-  border-radius: 16px;
-  padding: 18px;
   border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  padding: 16px;
+  min-height: 450px;
 }
 
-.connection-card-header {
-  position: relative;
-  margin-bottom: 14px;
+.panel-head {
   display: flex;
-  justify-content: center;
-}
-
-.connection-avatar {
-  width: 102px;
-  height: 102px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #d0e1f4;
-}
-
-.connection-status {
-  position: absolute;
-  bottom: 0;
-  right: calc(50% - 36px);
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  background: #97a9bb;
-  color: white;
-}
-
-.connection-status.online {
-  background: var(--accent);
-}
-
-.connection-info {
-  text-align: center;
-  margin-bottom: 14px;
-}
-
-.connection-name {
-  font-size: 1.13rem;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-
-.connection-email {
-  color: var(--muted);
-  font-size: 0.88rem;
-  margin-bottom: 8px;
-}
-
-.connection-bio {
-  color: #72859c;
-  font-size: 0.88rem;
-  line-height: 1.42;
-  min-height: 38px;
-}
-
-.connection-actions {
-  display: flex;
-  justify-content: center;
-}
-
-.connection-action {
-  display: inline-flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
-  color: white;
-  text-decoration: none;
-  border-radius: 11px;
-  font-weight: 700;
-  font-size: 0.88rem;
-}
-
-.no-connections {
-  min-height: 360px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.no-connections-content {
-  text-align: center;
-  padding: 26px;
-  background: var(--card);
-  border-radius: 18px;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-}
-
-.no-connections-icon {
-  font-size: 3.8rem;
-  color: #7fa9dc;
   margin-bottom: 12px;
 }
 
-.no-connections-content h3 {
-  font-size: 1.4rem;
-  color: var(--text);
-  margin-bottom: 8px;
+.panel-head h2 {
+  font-size: 1.2rem;
 }
 
-.no-connections-content p {
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-
-.browse-btn {
-  display: inline-block;
-  padding: 10px 16px;
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
-  color: white;
-  text-decoration: none;
-  border-radius: 11px;
+.panel-head span {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
   font-weight: 700;
+  background: #e8f2ff;
+  color: #0b68de;
 }
 
-@media (max-width: 768px) {
-  .connections-grid {
+.panel-empty {
+  color: var(--muted);
+}
+
+.people-list {
+  display: grid;
+  gap: 10px;
+}
+
+.person-card {
+  border: 1px solid #dce7f5;
+  background: #f8fbff;
+  border-radius: 14px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.person-meta {
+  min-width: 0;
+}
+
+.person-meta h3 {
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.person-meta p,
+.person-meta small {
+  color: var(--muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.person-meta .online {
+  color: #0a8d5f;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  text-decoration: none;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.message-btn {
+  background: #0fb57b;
+}
+
+.connect-btn {
+  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
+}
+
+.pending-btn {
+  background: #9ba9b8;
+  cursor: not-allowed;
+}
+
+.request-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  border: none;
+  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  color: white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.accept-btn {
+  background: #0fb57b;
+}
+
+.reject-btn {
+  background: #d14343;
+}
+
+@media (max-width: 980px) {
+  .connections-layout {
     grid-template-columns: 1fr;
+  }
+
+  .panel {
+    min-height: 0;
   }
 }

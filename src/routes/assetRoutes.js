@@ -1,0 +1,14 @@
+import express from 'express';
+import { protect } from '../middleware/auth.js';
+import assetUpload from '../middleware/assetUpload.js';
+import { createAsset, getPublicAssets, getAssetById, getMyAssets } from '../controllers/assetController.js';
+
+const router = express.Router();
+
+router.use(protect);
+router.get('/', getPublicAssets);
+router.get('/me', getMyAssets);
+router.get('/:id', getAssetById);
+router.post('/', assetUpload.array('media', 10), createAsset);
+
+export default router;

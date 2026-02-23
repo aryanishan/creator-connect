@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import Connection from '../models/connection.js';
+import Message from '../models/message.js';
 
 // @desc    Get all users (except current user)
 // @route   GET /api/users
@@ -254,6 +255,27 @@ export const getConnectionRequests = async (req, res) => {
     res.json(requests.map(req => req.requester));
   } catch (error) {
     console.error('Get requests error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// @desc    Get current user profile stats
+// @route   GET /api/users/profile/stats
+// @access  Private
+export const getProfileStats = async (req, res) => {
+  try {
+    const [freshUser, messagesSent] = await Promise.all([
+      User.findById(req.user._id).select('connections pendingRequests'),
+      Message.countDocuments({ sender: req.user._id })
+    ]);
+
+    res.json({
+      connections: freshUser?.connections?.length || 0,
+      pendingRequests: freshUser?.pendingRequests?.length || 0,
+      messagesSent
+    });
+  } catch (error) {
+    console.error('Get profile stats error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };

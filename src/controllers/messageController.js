@@ -7,8 +7,9 @@ import User from '../models/User.js';
 export const sendMessage = async (req, res) => {
   try {
     const { receiverId, content } = req.body;
+    const trimmedContent = content?.trim();
 
-    if (!receiverId || !content) {
+    if (!receiverId || !trimmedContent) {
       return res.status(400).json({ message: 'Receiver and content are required' });
     }
 
@@ -19,7 +20,9 @@ export const sendMessage = async (req, res) => {
     }
 
     // Check if users are connected
-    const areConnected = req.user.connections.includes(receiverId);
+    const areConnected = req.user.connections.some(
+      (connectionId) => connectionId.toString() === receiverId
+    );
     if (!areConnected) {
       return res.status(403).json({ message: 'You can only message connected users' });
     }
@@ -27,7 +30,7 @@ export const sendMessage = async (req, res) => {
     const message = await Message.create({
       sender: req.user._id,
       receiver: receiverId,
-      content
+      content: trimmedContent
     });
 
     const populatedMessage = await Message.findById(message._id)

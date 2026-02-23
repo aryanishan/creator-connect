@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
@@ -12,7 +12,7 @@ const Messages = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { sendMessage, joinConversation, isOnline, startTyping, stopTyping } = useSocket();
+  const { socket, sendMessage, joinConversation, isOnline, startTyping, stopTyping } = useSocket();
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -22,22 +22,7 @@ const Messages = () => {
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
-  useEffect(() => {
-    fetchConversations();
-  }, []);
-
-  useEffect(() => {
-    if (userId) {
-      fetchConversation(userId);
-      joinConversation(userId);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const fetchConversations = async () => {
+  const fetchConversations = useCallback(async () => {
     try {
       const response = await api.get('/messages/conversations');
       setConversations(response.data);
@@ -46,13 +31,13 @@ const Messages = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchConversation = async (otherUserId) => {
+  const fetchConversation = useCallback(async (otherUserId) => {
     try {
       const response = await api.get(`/messages/${otherUserId}`);
       setMessages(response.data);
-      
+
       // Find and set selected user
       if (response.data.length > 0) {
         const otherUser = response.data[0].sender._id === user._id
@@ -67,7 +52,107 @@ const Messages = () => {
     } catch (error) {
       toast.error('Failed to load conversation');
     }
-  };
+  }, [user?._id]);
+
+  useEffect(() => {
+    fetchConversations();
+  }, [fetchConversations]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchConversation(userId);
+      joinConversation(userId);
+      if (socket) {
+        socket.emit('conversation:read', { otherUserId: userId });
+      }
+    } else {
+      setSelectedUser(null);
+      setMessages([]);
+    }
+  }, [userId, fetchConversation, joinConversation, socket]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!socket || !user) return;
+
+    const handleMessageReceived = (message) => {
+      const otherUserId = selectedUser?._id;
+      const senderId = message?.sender?._id;
+      const receiverId = message?.receiver?._id;
+      const belongsToSelectedConversation =
+        otherUserId &&
+        (
+          (senderId === otherUserId && receiverId === user._id) ||
+          (senderId === user._id && receiverId === otherUserId)
+        );
+
+      if (belongsToSelectedConversation) {
+        setMessages((prev) => {
+          if (prev.some((item) => item._id === message._id)) return prev;
+          return [...prev, message];
+        });
+
+        if (senderId === otherUserId && receiverId === user._id) {
+          socket.emit('conversation:read', { otherUserId });
+        }
+      }
+
+      fetchConversations();
+    };
+
+    const handleConversationUpdated = () => {
+      fetchConversations();
+    };
+
+    const handleTypingStart = ({ userId: typingUserId, name }) => {
+      if (typingUserId === selectedUser?._id) {
+        setTypingUser(name || 'Typing');
+      }
+    };
+
+    const handleTypingStop = ({ userId: typingUserId }) => {
+      if (typingUserId === selectedUser?._id) {
+        setTypingUser(null);
+      }
+    };
+
+    const handleMessageRead = ({ readerId }) => {
+      if (readerId !== selectedUser?._id) return;
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.sender._id === user._id && msg.receiver._id === readerId
+            ? { ...msg, read: true, readAt: msg.readAt || new Date().toISOString() }
+            : msg
+        )
+      );
+    };
+
+    socket.on('message:received', handleMessageReceived);
+    socket.on('conversation:updated', handleConversationUpdated);
+    socket.on('typing:start', handleTypingStart);
+    socket.on('typing:stop', handleTypingStop);
+    socket.on('message:read', handleMessageRead);
+
+    return () => {
+      socket.off('message:received', handleMessageReceived);
+      socket.off('conversation:updated', handleConversationUpdated);
+      socket.off('typing:start', handleTypingStart);
+      socket.off('typing:stop', handleTypingStop);
+      socket.off('message:read', handleMessageRead);
+    };
+  }, [socket, user, selectedUser, fetchConversations]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -204,20 +289,18 @@ const Messages = () => {
                 const isOwnMessage = msg.sender._id === user._id;
                 const showAvatar = index === 0 || 
                   messages[index - 1]?.sender._id !== msg.sender._id;
+                const showSenderName = !isOwnMessage && showAvatar;
 
                 return (
                   <div
                     key={msg._id}
                     className={`message-wrapper ${isOwnMessage ? 'own' : ''}`}
                   >
-                    {!isOwnMessage && showAvatar && (
-                      <img
-                        src={msg.sender.avatar}
-                        alt={msg.sender.name}
-                        className="message-avatar"
-                      />
-                    )}
-                    <div className={`message-bubble ${isOwnMessage ? 'own' : ''}`}>
+                    <div className={`message-block ${isOwnMessage ? 'own' : ''}`}>
+                      {showSenderName && (
+                        <p className="message-sender-name">{msg.sender.name}</p>
+                      )}
+                      <div className={`message-bubble ${isOwnMessage ? 'own' : ''}`}>
                       <p className="message-content">{msg.content}</p>
                       <div className="message-meta">
                         <span className="message-time">
@@ -225,11 +308,11 @@ const Messages = () => {
                         </span>
                         {isOwnMessage && (
                           <span className="message-status">
-                            {/* Using single check for both sent and read */}
-                            <FiCheck />
+                            <FiCheck style={{ opacity: msg.read ? 1 : 0.7 }} />
                           </span>
                         )}
                       </div>
+                    </div>
                     </div>
                   </div>
                 );

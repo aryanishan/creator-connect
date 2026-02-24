@@ -157,3 +157,35 @@
     min-height: 0;
   }
 }
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 12px;
+  }
+
+  .person-card {
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+  }
+
+  .person-card .action-btn,
+  .person-card .request-actions {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .request-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .connections-title {
+    font-size: 1.35rem;
+  }
+
+  .action-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}

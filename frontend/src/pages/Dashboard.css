@@ -129,6 +129,12 @@
   padding: 10px 16px;
 }
 
+@media (max-width: 1100px) {
+  .asset-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .feed-header,
   .empty-feed {
@@ -137,5 +143,19 @@
 
   .asset-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .feed-header {
+    padding: 18px 14px;
+  }
+
+  .asset-body {
+    padding: 12px;
+  }
+
+  .asset-body h3 {
+    font-size: 1rem;
   }
 }

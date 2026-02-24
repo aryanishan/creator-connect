@@ -70,6 +70,12 @@
   color: var(--muted);
 }
 
+@media (max-width: 1024px) {
+  .asset-detail-media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .asset-detail-card {
     border-radius: 14px;
@@ -78,5 +84,16 @@
 
   .asset-detail-media-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .asset-detail-card {
+    padding: 12px;
+  }
+
+  .asset-detail-meta {
+    width: 100%;
+    justify-content: flex-start;
   }
 }

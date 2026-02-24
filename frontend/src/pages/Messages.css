@@ -13,14 +13,13 @@
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
-  background: #f6faff;
+  background: #eef3f0;
 }
 
 .sidebar-header {
   padding: 18px 16px;
   border-bottom: 1px solid var(--line);
-  background: #ffffffd9;
-  backdrop-filter: blur(4px);
+  background: #ffffff;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -41,21 +40,21 @@
   display: flex;
   gap: 11px;
   padding: 11px;
-  border-radius: 12px;
+  border-radius: 5px;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: 1px solid #d7dfda;
   margin-bottom: 6px;
-  transition: all 0.18s ease;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
 }
 
 .conversation-item:hover {
-  background: #edf4ff;
+  background: #e6eee9;
 }
 
 .conversation-item.active {
-  background: #e5efff;
-  border-color: #c4d8f5;
-  box-shadow: 0 6px 16px rgba(15, 123, 255, 0.12);
+  background: #dce9e1;
+  border-color: #94b7a2;
+  box-shadow: 0 6px 16px rgba(16, 21, 18, 0.08);
 }
 
 .conversation-avatar {
@@ -70,7 +69,7 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #cdddf0;
+  border: 2px solid #b3c3bb;
 }
 
 .online-dot {
@@ -81,7 +80,7 @@
   height: 11px;
   background: var(--accent);
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid #ffffff;
 }
 
 .conversation-info {
@@ -107,7 +106,7 @@
 
 .conversation-time {
   font-size: 0.72rem;
-  color: #7f92aa;
+  color: #6e7a72;
   white-space: nowrap;
 }
 
@@ -136,7 +135,7 @@
   display: inline-grid;
   place-items: center;
   padding: 0 6px;
-  border-radius: 999px;
+  border-radius: 5px;
 }
 
 .no-conversations {
@@ -163,8 +162,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #ffffffde;
-  backdrop-filter: blur(6px);
+  background: #ffffff;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -191,7 +189,7 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #cbddf0;
+  border: 2px solid #bfd0c7;
 }
 
 .chat-user-details h3 {
@@ -202,7 +200,7 @@
 
 .user-status {
   font-size: 0.78rem;
-  color: #8497ad;
+  color: #7a857e;
 }
 
 .user-status.online {
@@ -224,9 +222,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background:
-    radial-gradient(circle at 0 0, rgba(15, 123, 255, 0.05), transparent 30%),
-    white;
+  background: #f6faf7;
 }
 
 .message-wrapper {
@@ -254,32 +250,33 @@
 .message-sender-name {
   margin: 0 2px;
   font-size: 0.72rem;
-  color: #6f849e;
+  color: #66736b;
   font-weight: 700;
   line-height: 1;
 }
 
 .message-bubble {
-  background: #eef4fc;
-  border: 1px solid #d5e2f4;
+  background: #e9f1ec;
+  border: 1px solid #cedbd3;
   padding: 10px 12px;
-  border-radius: 14px 14px 14px 6px;
-  box-shadow: 0 2px 8px rgba(15, 31, 51, 0.05);
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(16, 21, 18, 0.05);
 }
 
 .message-bubble.own {
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
+  background: var(--brand);
   color: white;
-  border-color: transparent;
-  border-radius: 14px 14px 6px 14px;
-  box-shadow: 0 8px 20px rgba(15, 123, 255, 0.24);
+  border-color: var(--brand);
+  border-radius: 5px;
+  box-shadow: 0 8px 20px rgba(0, 123, 68, 0.22);
 }
 
 .message-content {
-  font-size: 0.92rem;
-  line-height: 1.45;
+  font-size: 0.94rem;
+  line-height: 1.5;
   margin-bottom: 4px;
   word-break: break-word;
+  letter-spacing: 0.01em;
 }
 
 .message-meta {
@@ -295,22 +292,23 @@
 }
 
 .message-bubble:not(.own) .message-meta {
-  color: #7990a9;
+  color: #6e7c73;
 }
 
 .typing-indicator {
   display: flex;
   gap: 4px;
   padding: 8px 10px;
-  background: #ecf3fd;
-  border-radius: 12px;
+  background: #e9efeb;
+  border-radius: 5px;
   width: fit-content;
+  border: 1px solid #d4ddd8;
 }
 
 .typing-indicator span {
   width: 7px;
   height: 7px;
-  background: #7f95af;
+  background: #7b877f;
   border-radius: 50%;
   animation: typing 1.4s infinite ease-in-out;
 }
@@ -339,8 +337,7 @@
   border-top: 1px solid var(--line);
   display: flex;
   gap: 8px;
-  background: #ffffffde;
-  backdrop-filter: blur(4px);
+  background: #ffffff;
 }
 
 .message-input {
@@ -348,24 +345,24 @@
   height: 42px;
   padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 5px;
   font-size: 0.93rem;
-  background: #f9fbfe;
+  background: #f9fbfa;
 }
 
 .message-input:focus {
   outline: none;
   border-color: var(--brand);
-  box-shadow: 0 0 0 3px rgba(15, 123, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 123, 68, 0.14);
 }
 
 .send-button {
   min-width: 42px;
   height: 42px;
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
+  background: var(--brand);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 5px;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -388,7 +385,7 @@
 .no-chat-icon {
   font-size: 3.6rem;
   margin-bottom: 14px;
-  color: #7ea8da;
+  color: #84a593;
 }
 
 .no-chat-selected h3 {
@@ -397,10 +394,38 @@
   color: var(--text);
 }
 
+@media (max-width: 1200px) {
+  .conversations-sidebar {
+    width: 320px;
+  }
+
+  .message-wrapper {
+    max-width: min(78%, 560px);
+  }
+}
+
+@media (max-width: 992px) {
+  .messages-container {
+    height: calc(100vh - 104px);
+  }
+
+  .conversations-sidebar {
+    width: 300px;
+  }
+
+  .messages-list {
+    padding: 14px;
+  }
+
+  .message-wrapper {
+    max-width: 84%;
+  }
+}
+
 @media (max-width: 768px) {
   .messages-container {
     height: calc(100vh - 92px);
-    border-radius: 14px;
+    border-radius: 5px;
   }
 
   .conversations-sidebar {
@@ -430,5 +455,59 @@
 
   .messages-list {
     padding: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .chat-header {
+    padding: 10px 12px;
+  }
+
+  .chat-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .chat-user-details h3 {
+    font-size: 0.9rem;
+  }
+
+  .message-input-container {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .message-input {
+    height: 40px;
+    font-size: 0.9rem;
+  }
+
+  .send-button {
+    min-width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages-container {
+    height: calc(100vh - 84px);
+  }
+
+  .conversation-item {
+    padding: 9px;
+    gap: 8px;
+  }
+
+  .conversation-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .message-wrapper {
+    max-width: 96%;
+  }
+
+  .message-bubble {
+    padding: 8px 10px;
   }
 }

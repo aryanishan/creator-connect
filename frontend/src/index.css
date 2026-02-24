@@ -1,20 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap');
 
 :root {
-  --bg: #f4f7fb;
-  --bg-soft: #eaf0f7;
+  --bg: #f3f6f4;
+  --bg-soft: #e9efeb;
   --card: #ffffff;
-  --text: #0f1f33;
-  --muted: #5b6d83;
-  --line: #d9e2ee;
-  --brand: #0f7bff;
-  --brand-strong: #005fd1;
-  --accent: #0fb57b;
+  --text: #101512;
+  --muted: #5a655e;
+  --line: #d3dbd6;
+  --brand: #00a35c;
+  --brand-strong: #007b44;
+  --accent: #138f5a;
   --danger: #d14343;
-  --shadow-sm: 0 10px 24px rgba(15, 31, 51, 0.08);
-  --shadow-md: 0 18px 44px rgba(15, 31, 51, 0.12);
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  --shadow-sm: 0 8px 20px rgba(16, 21, 18, 0.08);
+  --shadow-md: 0 16px 34px rgba(16, 21, 18, 0.12);
+  --radius-md: 5px;
+  --radius-lg: 5px;
 }
 
 * {
@@ -30,12 +30,9 @@ body,
 }
 
 body {
-  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(circle at 10% 10%, #ffffff 0%, transparent 35%),
-    radial-gradient(circle at 90% 0%, #d8ebff 0%, transparent 30%),
-    linear-gradient(160deg, var(--bg) 0%, var(--bg-soft) 100%);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -44,8 +41,8 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: 'Space Grotesk', 'Manrope', sans-serif;
-  letter-spacing: -0.02em;
+  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -58,17 +55,17 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #edf2f8;
+  background: #e6ece8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #b4c4d8;
-  border-radius: 999px;
-  border: 2px solid #edf2f8;
+  background: #9cb0a2;
+  border-radius: 5px;
+  border: 2px solid #e6ece8;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #95aac3;
+  background: #81988a;
 }
 
 @keyframes fadeIn {

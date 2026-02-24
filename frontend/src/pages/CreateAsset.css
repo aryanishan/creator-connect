@@ -82,9 +82,32 @@
   cursor: not-allowed;
 }
 
+@media (max-width: 1024px) {
+  .create-asset-card {
+    width: min(820px, 100%);
+  }
+}
+
 @media (max-width: 768px) {
   .create-asset-card {
     border-radius: 14px;
     padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .create-asset-card {
+    padding: 12px;
+  }
+
+  .create-asset-form {
+    gap: 10px;
+  }
+
+  .create-asset-form input,
+  .create-asset-form textarea,
+  .create-asset-form select,
+  .create-asset-form button {
+    font-size: 0.9rem;
   }
 }

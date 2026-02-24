@@ -46,7 +46,7 @@
   padding: 11px 12px;
   font-family: inherit;
   font-size: 0.95rem;
-  background: #fbfdff;
+  background: #f7faff;
 }
 
 .create-asset-form textarea {
@@ -63,7 +63,7 @@
 }
 
 .selected-files {
-  color: #0a7a53;
+  color: #2d6fda;
   font-size: 0.9rem;
 }
 
@@ -73,7 +73,7 @@
   padding: 11px 14px;
   font-weight: 700;
   color: white;
-  background: linear-gradient(120deg, #0fb57b 0%, #07895c 100%);
+  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
   cursor: pointer;
 }
 

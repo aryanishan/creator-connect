@@ -7,7 +7,7 @@
   width: min(980px, 100%);
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: 26px 24px;
 }
@@ -29,9 +29,9 @@
 
 .offer-card {
   position: relative;
-  border: 1px solid #d7e2db;
-  background: #f8fbf9;
-  border-radius: 12px;
+  border: 1px solid #d6e4f7;
+  background: #f7faff;
+  border-radius: 16px;
   padding: 18px 16px;
   display: flex;
   flex-direction: column;
@@ -45,18 +45,18 @@
 .offer-price {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #0f1a13;
+  color: #1a3455;
   margin-bottom: 0;
 }
 
 .offer-bonus {
-  color: #0d8b5a;
+  color: #2c70d8;
   font-weight: 700;
   margin-bottom: 0;
 }
 
 .offer-bonus.empty {
-  color: #8b988f;
+  color: #8a9eb8;
 }
 
 .buy-btn {
@@ -86,14 +86,14 @@
 }
 
 .popular {
-  border-color: #0ea26c;
-  background: linear-gradient(180deg, #f5fff9 0%, #e9f8ef 100%);
-  box-shadow: 0 12px 24px rgba(0, 123, 68, 0.16);
+  border-color: #7fb2ff;
+  background: linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
+  box-shadow: 0 12px 24px rgba(63, 140, 255, 0.18);
 }
 
 .popular-badge {
   align-self: flex-start;
-  background: #07895c;
+  background: var(--brand-strong);
   color: #ffffff;
   border-radius: 999px;
   padding: 4px 10px;

@@ -26,7 +26,7 @@
   height: 168px;
   border-radius: 50%;
   padding: 4px;
-  background: linear-gradient(130deg, #f79f3f 0%, #f36364 45%, #8b5cf6 100%);
+  background: linear-gradient(130deg, #65a4ff 0%, #4f90f7 45%, #2f71de 100%);
 }
 
 .ig-avatar {
@@ -42,10 +42,10 @@
   align-items: center;
   gap: 7px;
   padding: 10px 14px;
-  border: 1px solid #d3deec;
+  border: 1px solid #d6e4f7;
   border-radius: 999px;
-  background: #f2f7fd;
-  color: #26486d;
+  background: #f4f8ff;
+  color: #2e4f77;
   font-weight: 700;
   cursor: pointer;
 }
@@ -90,9 +90,9 @@
   border-radius: 10px;
   padding: 9px 13px;
   font-weight: 700;
-  color: #0a6b48;
-  background: #e8f7f0;
-  border: 1px solid #b8e4cf;
+  color: #2f5b92;
+  background: #eef5ff;
+  border: 1px solid #d4e3f8;
 }
 
 .ig-edit-btn {
@@ -116,8 +116,8 @@
 }
 
 .ig-stats-row div {
-  background: #f6faff;
-  border: 1px solid #dde8f5;
+  background: #f7faff;
+  border: 1px solid #dbe7f8;
   border-radius: 12px;
   padding: 10px 8px;
   text-align: center;
@@ -143,7 +143,7 @@
 }
 
 .ig-meta {
-  color: #61768e;
+  color: #5e7391;
   font-size: 0.88rem;
   margin-bottom: 6px;
 }
@@ -157,8 +157,8 @@
 }
 
 .status-badge.verified {
-  background: #d8f4e8;
-  color: #0d764f;
+  background: #e5f0ff;
+  color: #275291;
 }
 
 .status-badge.unverified {
@@ -256,8 +256,8 @@
 }
 
 .cancel-btn {
-  background: #edf3fa;
-  color: var(--muted);
+  background: #edf3fd;
+  color: #5d7393;
 }
 
 .ig-assets-section {
@@ -283,7 +283,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #6f8298;
+  color: #6c83a2;
   font-weight: 700;
   cursor: pointer;
   border-bottom: 2px solid transparent;
@@ -291,17 +291,17 @@
 
 .ig-tab small {
   font-weight: 600;
-  color: #8fa0b4;
+  color: #8ea2bf;
 }
 
 .ig-tab strong {
   font-size: 0.8rem;
-  color: #4d6683;
+  color: #547193;
 }
 
 .ig-tab.active {
   color: var(--text);
-  border-bottom-color: var(--text);
+  border-bottom-color: var(--brand);
 }
 
 .ig-tab.active small,
@@ -313,7 +313,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
-  background: #dbe6f3;
+  background: #d8e5f7;
 }
 
 .ig-grid-item {
@@ -321,7 +321,7 @@
   aspect-ratio: 16 / 9;
   display: block;
   overflow: hidden;
-  background: #edf3fb;
+  background: #edf3fd;
 }
 
 .ig-media {
@@ -334,7 +334,7 @@
 .ig-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(8, 23, 40, 0.45);
+  background: rgba(22, 46, 78, 0.45);
   color: white;
   display: grid;
   align-content: end;

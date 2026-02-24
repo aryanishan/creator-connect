@@ -82,7 +82,7 @@
   border-radius: 10px;
   padding: 10px 14px;
   font-weight: 600;
-  background: #0f9d58;
+  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
   color: #fff;
   cursor: pointer;
 }
@@ -96,8 +96,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid #dbe5f2;
-  background: #f7fbff;
+  border: 1px solid #d8e4f6;
+  background: #f6faff;
   border-radius: 999px;
   padding: 6px 12px;
   margin-bottom: 14px;
@@ -124,8 +124,8 @@
 .asset-detail-media-item {
   border-radius: 14px;
   overflow: hidden;
-  background: #d8e6f6;
-  border: 1px solid #cfe0f1;
+  background: #dbe8f9;
+  border: 1px solid #cedef3;
 }
 
 .asset-detail-media-item img,

@@ -10,6 +10,7 @@ import assetRoutes from './routes/assetRoutes.js';
 import webhookRoutes from './routes/webhookRoutes.js';
 import tokenRoutes from './routes/tokenRoutes.js';
 import { setupSocket } from './socket/socketHandler.js';
+import { setSocketServer } from './socket/socketEmitter.js';
 import connectDB from './config/db.js';
 
 dotenv.config();
@@ -55,6 +56,7 @@ app.get('/health', (req, res) => {
 });
 
 // Socket.io setup
+setSocketServer(io);
 setupSocket(io);
 
 // Error handling middleware

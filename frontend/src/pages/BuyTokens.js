@@ -112,7 +112,13 @@ const BuyTokens = () => {
 
       console.log('Token order response:', response.data);
 
-      const { paymentSessionId, paymentLink } = response.data;
+      const { paymentSessionId, paymentLink, autoVerified, status, creditedTokens } = response.data;
+
+      if (autoVerified || status === 'PAID') {
+        alert(`Payment successful! You have received ${creditedTokens} tokens.`);
+        navigate('/dashboard');
+        return;
+      }
 
       if (!paymentSessionId && !paymentLink) {
         throw new Error('No payment session received from server');

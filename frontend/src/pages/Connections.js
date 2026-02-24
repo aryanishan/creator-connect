@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSocket } from '../context/SocketContext';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { FiMessageCircle, FiUserPlus, FiCheck, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import api from '../config/api';
@@ -8,16 +8,21 @@ import './Connections.css';
 
 const Connections = () => {
   const { isOnline } = useSocket();
+  const [searchParams] = useSearchParams();
+  const searchTerm = (searchParams.get('search') || '').trim();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers(searchTerm);
+  }, [searchTerm]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (search = '') => {
     try {
-      const response = await api.get('/users');
+      setLoading(true);
+      const response = await api.get('/users', {
+        params: search ? { search } : {}
+      });
       setUsers(response.data);
     } catch (error) {
       toast.error('Failed to fetch users');
@@ -30,7 +35,7 @@ const Connections = () => {
     try {
       await api.post(`/users/connect/${userId}`);
       toast.success('Connection request sent');
-      fetchUsers();
+      fetchUsers(searchTerm);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to connect');
     }
@@ -40,7 +45,7 @@ const Connections = () => {
     try {
       await api.put(`/users/accept/${userId}`);
       toast.success('Connection accepted');
-      fetchUsers();
+      fetchUsers(searchTerm);
     } catch (error) {
       toast.error('Failed to accept request');
     }
@@ -50,7 +55,7 @@ const Connections = () => {
     try {
       await api.put(`/users/reject/${userId}`);
       toast.success('Request rejected');
-      fetchUsers();
+      fetchUsers(searchTerm);
     } catch (error) {
       toast.error('Failed to reject request');
     }
@@ -107,6 +112,7 @@ const Connections = () => {
   return (
     <div className="connections-page fade-in">
       <h1 className="connections-title">Connections</h1>
+      {searchTerm && <p className="connections-search-tag">Showing results for "{searchTerm}"</p>}
 
       <div className="connections-layout">
         <section className="panel">

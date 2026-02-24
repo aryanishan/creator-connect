@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import CreateAsset from './pages/CreateAsset';
 import AssetDetail from './pages/AssetDetail';
 import BuyTokens from './pages/BuyTokens';
+import Search from './pages/Search';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -33,6 +34,7 @@ const AppContent = () => {
           <Route path="/messages/:userId" element={<PrivateRoute><Messages /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/tokens/buy" element={<PrivateRoute><BuyTokens /></PrivateRoute>} />
+          <Route path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>

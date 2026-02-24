@@ -5,11 +5,11 @@
 
 .create-asset-card {
   width: min(760px, 100%);
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
+  background: #efeff2;
+  border: 1px solid #c7c7cd;
+  box-shadow: none;
   border-radius: var(--radius-lg);
-  padding: 26px;
+  padding: 18px;
 }
 
 .create-asset-card h1 {
@@ -24,7 +24,7 @@
 
 .create-asset-form {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .create-asset-form label {
@@ -46,7 +46,7 @@
   padding: 11px 12px;
   font-family: inherit;
   font-size: 0.95rem;
-  background: #f7faff;
+  background: #f8f8f9;
 }
 
 .create-asset-form textarea {
@@ -63,7 +63,7 @@
 }
 
 .selected-files {
-  color: #2d6fda;
+  color: var(--mint-700);
   font-size: 0.9rem;
 }
 
@@ -73,7 +73,7 @@
   padding: 11px 14px;
   font-weight: 700;
   color: white;
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
+  background: linear-gradient(180deg, var(--cta-start) 0%, var(--cta-end) 100%);
   cursor: pointer;
 }
 

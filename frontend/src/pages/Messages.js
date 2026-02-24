@@ -3,7 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import api from '../config/api';
-import { FiSend, FiArrowLeft, FiMoreVertical, FiUser, FiCheck, FiMessageCircle } from 'react-icons/fi';
+import {
+  FiSend,
+  FiArrowLeft,
+  FiMoreVertical,
+  FiCheck,
+  FiMessageCircle,
+  FiPaperclip,
+  FiX
+} from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import './Messages.css';
@@ -19,8 +27,11 @@ const Messages = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [typingUser, setTypingUser] = useState(null);
+  const [attachmentFile, setAttachmentFile] = useState(null);
+  const [sendingAttachment, setSendingAttachment] = useState(false);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const attachmentInputRef = useRef(null);
 
   const fetchConversations = useCallback(async () => {
     try {
@@ -59,6 +70,13 @@ const Messages = () => {
   }, [fetchConversations]);
 
   useEffect(() => {
+    document.body.classList.add('messages-page-active');
+    return () => {
+      document.body.classList.remove('messages-page-active');
+    };
+  }, []);
+
+  useEffect(() => {
     if (userId) {
       fetchConversation(userId);
       joinConversation(userId);
@@ -68,6 +86,10 @@ const Messages = () => {
     } else {
       setSelectedUser(null);
       setMessages([]);
+    }
+    setAttachmentFile(null);
+    if (attachmentInputRef.current) {
+      attachmentInputRef.current.value = '';
     }
   }, [userId, fetchConversation, joinConversation, socket]);
 
@@ -154,13 +176,68 @@ const Messages = () => {
     };
   }, [socket, user, selectedUser, fetchConversations]);
 
+  const getAttachmentLabel = (attachment) => {
+    if (!attachment?.url) return '';
+    if (attachment.mediaType === 'image') return 'Photo';
+    if (attachment.mediaType === 'video') return 'Video';
+    return attachment.fileName || 'Attachment';
+  };
+
+  const getConversationPreviewText = (message) => {
+    if (!message) return '';
+    if (message.content?.trim()) return message.content;
+    if (message.attachment?.url) return `[${getAttachmentLabel(message.attachment)}]`;
+    return '';
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !selectedUser) return;
+    if (!selectedUser || sendingAttachment) return;
 
-    sendMessage(selectedUser._id, newMessage);
-    setNewMessage('');
-    stopTyping(selectedUser._id);
+    const trimmedMessage = newMessage.trim();
+    if (!trimmedMessage && !attachmentFile) return;
+
+    if (!attachmentFile) {
+      sendMessage(selectedUser._id, trimmedMessage);
+      setNewMessage('');
+      stopTyping(selectedUser._id);
+      return;
+    }
+
+    const sendWithAttachment = async () => {
+      try {
+        setSendingAttachment(true);
+        const formData = new FormData();
+        formData.append('receiverId', selectedUser._id);
+        if (trimmedMessage) {
+          formData.append('content', trimmedMessage);
+        }
+        formData.append('attachment', attachmentFile);
+
+        const response = await api.post('/messages', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        const createdMessage = response.data;
+        setMessages((prev) => {
+          if (prev.some((item) => item._id === createdMessage._id)) return prev;
+          return [...prev, createdMessage];
+        });
+        fetchConversations();
+        setNewMessage('');
+        setAttachmentFile(null);
+        if (attachmentInputRef.current) {
+          attachmentInputRef.current.value = '';
+        }
+        stopTyping(selectedUser._id);
+      } catch (error) {
+        toast.error(error.response?.data?.message || 'Failed to send attachment');
+      } finally {
+        setSendingAttachment(false);
+      }
+    };
+
+    sendWithAttachment();
   };
 
   const handleTyping = () => {
@@ -195,6 +272,24 @@ const Messages = () => {
     } else {
       return format(date, 'MMM d, yyyy');
     }
+  };
+
+  const openAttachmentPicker = () => {
+    attachmentInputRef.current?.click();
+  };
+
+  const handleAttachmentChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const maxBytes = 12 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      toast.error('Attachment must be smaller than 12MB');
+      event.target.value = '';
+      return;
+    }
+
+    setAttachmentFile(file);
   };
 
   if (loading) {
@@ -234,7 +329,7 @@ const Messages = () => {
                 <div className="conversation-preview">
                   <p className="last-message">
                     {conv.lastMessage.sender._id === user._id ? 'You: ' : ''}
-                    {conv.lastMessage.content}
+                    {getConversationPreviewText(conv.lastMessage)}
                   </p>
                   {conv.unreadCount > 0 && (
                     <span className="unread-badge">{conv.unreadCount}</span>
@@ -301,18 +396,40 @@ const Messages = () => {
                         <p className="message-sender-name">{msg.sender.name}</p>
                       )}
                       <div className={`message-bubble ${isOwnMessage ? 'own' : ''}`}>
-                      <p className="message-content">{msg.content}</p>
-                      <div className="message-meta">
-                        <span className="message-time">
-                          {format(new Date(msg.createdAt), 'hh:mm a')}
-                        </span>
-                        {isOwnMessage && (
-                          <span className="message-status">
-                            <FiCheck style={{ opacity: msg.read ? 1 : 0.7 }} />
-                          </span>
+                        {msg.content && <p className="message-content">{msg.content}</p>}
+                        {msg.attachment?.url && (
+                          <div className="message-attachment">
+                            {msg.attachment.mediaType === 'image' ? (
+                              <img
+                                src={msg.attachment.url}
+                                alt={msg.attachment.fileName || 'Attachment'}
+                                className="message-attachment-image"
+                              />
+                            ) : msg.attachment.mediaType === 'video' ? (
+                              <video src={msg.attachment.url} controls className="message-attachment-video" />
+                            ) : (
+                              <a
+                                href={msg.attachment.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="message-attachment-file"
+                              >
+                                {msg.attachment.fileName || 'Open attachment'}
+                              </a>
+                            )}
+                          </div>
                         )}
+                        <div className="message-meta">
+                          <span className="message-time">
+                            {format(new Date(msg.createdAt), 'hh:mm a')}
+                          </span>
+                          {isOwnMessage && (
+                            <span className="message-status">
+                              <FiCheck style={{ opacity: msg.read ? 1 : 0.7 }} />
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
                     </div>
                   </div>
                 );
@@ -329,21 +446,51 @@ const Messages = () => {
 
             <form onSubmit={handleSendMessage} className="message-input-container">
               <input
+                ref={attachmentInputRef}
+                type="file"
+                className="attachment-input"
+                onChange={handleAttachmentChange}
+                accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx"
+              />
+              <button
+                type="button"
+                className="attach-button"
+                onClick={openAttachmentPicker}
+                aria-label="Attach file"
+              >
+                <FiPaperclip />
+              </button>
+              <input
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyUp={handleTyping}
-                placeholder="Type a message..."
+                placeholder={attachmentFile ? 'Add a caption (optional)...' : 'Type a message...'}
                 className="message-input"
               />
               <button
                 type="submit"
                 className="send-button"
-                disabled={!newMessage.trim()}
+                disabled={(!newMessage.trim() && !attachmentFile) || sendingAttachment}
               >
                 <FiSend />
               </button>
             </form>
+            {attachmentFile && (
+              <div className="attachment-preview-bar">
+                <span>{attachmentFile.name}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAttachmentFile(null);
+                    if (attachmentInputRef.current) attachmentInputRef.current.value = '';
+                  }}
+                  aria-label="Remove attachment"
+                >
+                  <FiX />
+                </button>
+              </div>
+            )}
           </>
         ) : (
           <div className="no-chat-selected">

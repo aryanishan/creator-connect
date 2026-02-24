@@ -5,11 +5,11 @@
 
 .buy-tokens-card {
   width: min(980px, 100%);
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: #efeff2;
+  border: 1px solid #c7c7cd;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: 26px 24px;
+  box-shadow: none;
+  padding: 18px;
 }
 
 .buy-tokens-card h1 {
@@ -24,15 +24,15 @@
 .offer-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
 }
 
 .offer-card {
   position: relative;
-  border: 1px solid #d6e4f7;
-  background: #f7faff;
+  border: 1px solid #cacad0;
+  background: #f8f8f9;
   border-radius: 16px;
-  padding: 18px 16px;
+  padding: 14px 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -45,18 +45,18 @@
 .offer-price {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a3455;
+  color: #23242a;
   margin-bottom: 0;
 }
 
 .offer-bonus {
-  color: #2c70d8;
+  color: #494a52;
   font-weight: 700;
   margin-bottom: 0;
 }
 
 .offer-bonus.empty {
-  color: #8a9eb8;
+  color: #8a8b93;
 }
 
 .buy-btn {
@@ -67,7 +67,7 @@
   font-weight: 700;
   cursor: pointer;
   color: white;
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
+  background: linear-gradient(180deg, var(--cta-start) 0%, var(--cta-end) 100%);
 }
 
 .buy-btn:disabled {
@@ -86,14 +86,14 @@
 }
 
 .popular {
-  border-color: #7fb2ff;
-  background: linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
-  box-shadow: 0 12px 24px rgba(63, 140, 255, 0.18);
+  border-color: var(--mint-300);
+  background: linear-gradient(180deg, #fafcf9 0%, var(--mint-50) 100%);
+  box-shadow: none;
 }
 
 .popular-badge {
   align-self: flex-start;
-  background: var(--brand-strong);
+  background: var(--mint-700);
   color: #ffffff;
   border-radius: 999px;
   padding: 4px 10px;

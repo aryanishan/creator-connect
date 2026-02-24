@@ -6,13 +6,14 @@ import {
   getConversations,
   markAsRead
 } from '../controllers/messageController.js';
+import messageUpload from '../middleware/messageUpload.js';
 
 const router = express.Router();
 
 // All routes are protected
 router.use(protect);
 
-router.post('/', sendMessage);
+router.post('/', messageUpload.single('attachment'), sendMessage);
 router.get('/conversations', getConversations);
 router.get('/:userId', getConversation);
 router.put('/read/:userId', markAsRead);

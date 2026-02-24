@@ -4,12 +4,12 @@
 
 .feed-header {
   text-align: center;
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: #efeff2;
+  border: 1px solid #c7c7cd;
   border-radius: var(--radius-lg);
-  padding: 28px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: none;
 }
 
 .feed-header h1 {
@@ -24,28 +24,28 @@
 .asset-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  gap: 10px;
 }
 
 .asset-card {
   text-decoration: none;
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: #f7f7f8;
+  border: 1px solid #cacad0;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .asset-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(26, 27, 32, 0.08);
 }
 
 .asset-media-wrap {
   position: relative;
   aspect-ratio: 16 / 9;
-  background: #dbe9fb;
+  background: #d2d2d7;
 }
 
 .asset-media {
@@ -58,7 +58,7 @@
   position: absolute;
   right: 10px;
   bottom: 10px;
-  background: rgba(20, 45, 73, 0.75);
+  background: rgba(26, 27, 32, 0.8);
   color: white;
   border-radius: 999px;
   padding: 4px 10px;
@@ -67,7 +67,7 @@
 }
 
 .asset-body {
-  padding: 16px;
+  padding: 12px;
 }
 
 .asset-body h3 {
@@ -89,7 +89,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #2d4768;
+  color: #2c2d32;
   font-weight: 700;
   font-size: 0.9rem;
 }
@@ -97,17 +97,17 @@
 .asset-owner img {
   width: 26px;
   height: 26px;
-  border-radius: 8px;
+  border-radius: 50%;
   object-fit: cover;
 }
 
 .empty-feed {
   text-align: center;
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: #efeff2;
+  border: 1px solid #c7c7cd;
   border-radius: var(--radius-lg);
   padding: 40px 20px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 
 .empty-feed h3 {
@@ -124,7 +124,7 @@
   text-decoration: none;
   color: white;
   font-weight: 700;
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
+  background: linear-gradient(180deg, var(--cta-start) 0%, var(--cta-end) 100%);
   border-radius: 12px;
   padding: 10px 16px;
 }

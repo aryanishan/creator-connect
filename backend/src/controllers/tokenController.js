@@ -24,6 +24,8 @@ const getCashfreeCheckoutBaseUrl = () => {
     : 'https://sandbox.cashfree.com';
 };
 
+const isAutoSuccessEnabled = () => process.env.CASHFREE_AUTO_SUCCESS === 'true';
+
 export const getTokenPlans = async (req, res) => {
   return res.json({ plans: getTokenPlanList() });
 };
@@ -51,6 +53,29 @@ export const createTokenOrder = async (req, res) => {
       totalTokens,
       status: 'CREATED'
     });
+
+    if (isAutoSuccessEnabled()) {
+      const creditResult = await creditTokensIfNeeded({
+        purchaseId: purchase._id,
+        cfPaymentId: `mock_${Date.now()}`,
+        paymentStatus: 'SUCCESS'
+      });
+
+      return res.status(201).json({
+        orderId,
+        status: 'PAID',
+        autoVerified: true,
+        alreadyCredited: creditResult.alreadyCredited,
+        creditedTokens: totalTokens,
+        plan: {
+          id: plan.id,
+          amount: plan.amount,
+          tokens: plan.tokens,
+          bonusTokens: plan.bonusTokens,
+          totalTokens
+        }
+      });
+    }
 
     const safePhone = (customerPhone || '9876543210').replace(/\D/g, '').slice(-10);
     const orderAmount = Number(plan.amount.toFixed(2));
@@ -116,6 +141,15 @@ export const verifyTokenOrder = async (req, res) => {
     const purchase = await TokenPurchase.findOne({ orderId, user: req.user._id });
     if (!purchase) {
       return res.status(404).json({ message: 'Order not found' });
+    }
+
+    if (purchase.status === 'PAID' || purchase.creditedAt) {
+      return res.json({
+        orderId,
+        status: 'PAID',
+        alreadyCredited: true,
+        creditedTokens: purchase.totalTokens
+      });
     }
 
     const cfOrder = await fetchCashfreeOrder(orderId);

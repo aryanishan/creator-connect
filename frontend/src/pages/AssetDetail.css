@@ -5,11 +5,11 @@
 
 .asset-detail-card {
   width: min(900px, 100%);
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
+  background: #efeff2;
+  border: 1px solid #c7c7cd;
+  box-shadow: none;
   border-radius: var(--radius-lg);
-  padding: 22px;
+  padding: 16px;
 }
 
 .asset-detail-card h1 {
@@ -36,18 +36,18 @@
 }
 
 .asset-action-btn.edit {
-  background: #e8f2ff;
-  color: #1f5fae;
+  background: var(--mint-50);
+  color: #1f2025;
 }
 
 .asset-action-btn.delete {
-  background: #ffe9e9;
-  color: #b32222;
+  background: #1e1f25;
+  color: #fff;
 }
 
 .asset-action-btn.cancel {
-  background: #f1f5f9;
-  color: #334155;
+  background: #dadbe0;
+  color: #2b2c31;
 }
 
 .asset-edit-form {
@@ -59,17 +59,17 @@
 .asset-edit-form label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #334155;
+  color: #2b2c31;
 }
 
 .asset-edit-form input,
 .asset-edit-form textarea,
 .asset-edit-form select {
-  border: 1px solid #d4e2f0;
+  border: 1px solid #c8c8ce;
   border-radius: 10px;
   padding: 10px 12px;
   font: inherit;
-  background: #f8fbff;
+  background: #f9f9fa;
 }
 
 .asset-save-btn {
@@ -82,7 +82,7 @@
   border-radius: 10px;
   padding: 10px 14px;
   font-weight: 600;
-  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-strong) 100%);
+  background: linear-gradient(180deg, var(--cta-start) 0%, var(--cta-end) 100%);
   color: #fff;
   cursor: pointer;
 }
@@ -96,8 +96,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid #d8e4f6;
-  background: #f6faff;
+  border: 1px solid #c8c8ce;
+  background: #f8f8f9;
   border-radius: 999px;
   padding: 6px 12px;
   margin-bottom: 14px;
@@ -112,20 +112,20 @@
 
 .asset-detail-meta small {
   text-transform: capitalize;
-  color: #587090;
+  color: #767780;
 }
 
 .asset-detail-media-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 .asset-detail-media-item {
   border-radius: 14px;
   overflow: hidden;
-  background: #dbe8f9;
-  border: 1px solid #cedef3;
+  background: #d0d0d5;
+  border: 1px solid #c3c3ca;
 }
 
 .asset-detail-media-item img,

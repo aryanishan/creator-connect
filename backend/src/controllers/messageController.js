@@ -1,5 +1,32 @@
 import Message from '../models/message.js';
 import User from '../models/User.js';
+import cloudinary from '../config/cloudinary.js';
+import { Readable } from 'stream';
+import { emitMessageUpdate } from '../socket/socketEmitter.js';
+
+const uploadAttachmentToCloudinary = (file) => new Promise((resolve, reject) => {
+  const stream = cloudinary.uploader.upload_stream(
+    {
+      folder: 'creatorconnect/messages',
+      resource_type: 'auto'
+    },
+    (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    }
+  );
+
+  Readable.from([file.buffer]).pipe(stream);
+});
+
+const getAttachmentType = (mimeType = '') => {
+  if (mimeType.startsWith('image/')) return 'image';
+  if (mimeType.startsWith('video/')) return 'video';
+  return 'file';
+};
 
 // @desc    Send a message
 // @route   POST /api/messages
@@ -7,10 +34,11 @@ import User from '../models/User.js';
 export const sendMessage = async (req, res) => {
   try {
     const { receiverId, content } = req.body;
-    const trimmedContent = content?.trim();
+    const trimmedContent = content?.trim() || '';
+    const hasAttachment = Boolean(req.file);
 
-    if (!receiverId || !trimmedContent) {
-      return res.status(400).json({ message: 'Receiver and content are required' });
+    if (!receiverId || (!trimmedContent && !hasAttachment)) {
+      return res.status(400).json({ message: 'Receiver and message content or attachment is required' });
     }
 
     // Check if receiver exists
@@ -27,15 +55,29 @@ export const sendMessage = async (req, res) => {
       return res.status(403).json({ message: 'You can only message connected users' });
     }
 
+    let attachmentData = null;
+    if (hasAttachment) {
+      const uploaded = await uploadAttachmentToCloudinary(req.file);
+      attachmentData = {
+        url: uploaded.secure_url,
+        fileName: req.file.originalname,
+        mediaType: getAttachmentType(req.file.mimetype),
+        size: req.file.size
+      };
+    }
+
     const message = await Message.create({
       sender: req.user._id,
       receiver: receiverId,
-      content: trimmedContent
+      content: trimmedContent,
+      attachment: attachmentData || undefined
     });
 
     const populatedMessage = await Message.findById(message._id)
       .populate('sender', 'name email avatar')
       .populate('receiver', 'name email avatar');
+
+    emitMessageUpdate(req.user._id.toString(), receiverId, populatedMessage);
 
     res.status(201).json(populatedMessage);
   } catch (error) {

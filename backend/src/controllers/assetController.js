@@ -82,7 +82,17 @@ export const createAsset = async (req, res) => {
 // @access  Private
 export const getPublicAssets = async (req, res) => {
   try {
-    const assets = await Asset.find({ visibility: 'public' })
+    const { search } = req.query;
+    const query = { visibility: 'public' };
+
+    if (search?.trim()) {
+      query.$or = [
+        { title: { $regex: search.trim(), $options: 'i' } },
+        { description: { $regex: search.trim(), $options: 'i' } }
+      ];
+    }
+
+    const assets = await Asset.find(query)
       .populate('owner', 'name avatar')
       .sort({ createdAt: -1 })
       .limit(100);

@@ -141,3 +141,63 @@ export const getAssetById = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// @desc    Update an asset (owner only)
+// @route   PUT /api/assets/:id
+// @access  Private
+export const updateAsset = async (req, res) => {
+  try {
+    const { title, description = '', visibility } = req.body;
+
+    const asset = await Asset.findById(req.params.id);
+    if (!asset) {
+      return res.status(404).json({ message: 'Asset not found' });
+    }
+
+    if (asset.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to edit this asset' });
+    }
+
+    if (!title?.trim()) {
+      return res.status(400).json({ message: 'Title is required' });
+    }
+
+    if (!['public', 'private', 'unlisted'].includes(visibility)) {
+      return res.status(400).json({ message: 'Invalid visibility value' });
+    }
+
+    asset.title = title.trim();
+    asset.description = description.trim();
+    asset.visibility = visibility;
+
+    const updatedAsset = await asset.save();
+    const populatedAsset = await Asset.findById(updatedAsset._id).populate('owner', 'name avatar');
+
+    return res.json(populatedAsset);
+  } catch (error) {
+    console.error('Update asset error:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// @desc    Delete an asset (owner only)
+// @route   DELETE /api/assets/:id
+// @access  Private
+export const deleteAsset = async (req, res) => {
+  try {
+    const asset = await Asset.findById(req.params.id);
+    if (!asset) {
+      return res.status(404).json({ message: 'Asset not found' });
+    }
+
+    if (asset.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to delete this asset' });
+    }
+
+    await asset.deleteOne();
+    return res.json({ message: 'Asset deleted successfully' });
+  } catch (error) {
+    console.error('Delete asset error:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};

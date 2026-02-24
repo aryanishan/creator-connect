@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import webhookRoutes from "./routes/webhookRoutes.js";
+import tokenRoutes from "./routes/tokenRoutes.js";
 
 dotenv.config();
 
@@ -13,11 +15,14 @@ connectDB();
 
 // Middleware
 app.use(cors());
+app.use('/api/webhooks', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/tokens", tokenRoutes);
+app.use("/api/webhooks", webhookRoutes);
 
 // Default route
 app.get("/", (req, res) => {

@@ -51,6 +51,7 @@ export const registerUser = async (req, res) => {
       email: user.email,
       avatar: user.avatar,
       bio: user.bio,
+      tokens: user.tokens,
       isVerified: user.isVerified,
       token
     });
@@ -177,6 +178,7 @@ export const verifyOTP = async (req, res) => {
       email: user.email,
       avatar: user.avatar,
       bio: user.bio,
+      tokens: user.tokens,
       isVerified: true,
       token
     });

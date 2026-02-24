@@ -7,6 +7,8 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import assetRoutes from './routes/assetRoutes.js';
+import webhookRoutes from './routes/webhookRoutes.js';
+import tokenRoutes from './routes/tokenRoutes.js';
 import { setupSocket } from './socket/socketHandler.js';
 import connectDB from './config/db.js';
 
@@ -34,6 +36,7 @@ app.set('trust proxy', 1);
 
 // Middleware
 app.use(cors(corsOptions));
+app.use('/api/webhooks', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,6 +45,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/assets', assetRoutes);
+app.use('/api/tokens', tokenRoutes);
+app.use('/api/webhooks', webhookRoutes);
 app.get('/', (req, res) => {
   res.send('CreatorConnect API is running...');
 });

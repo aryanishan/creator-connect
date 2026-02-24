@@ -12,8 +12,19 @@
   width: 100%;
 }
 
+.app-authenticated .main-content {
+  max-width: none;
+  margin-left: 84px;
+  padding: 102px 24px 28px;
+}
+
 @media (max-width: 1100px) {
   .main-content {
+    padding: 96px 18px 22px;
+  }
+
+  .app-authenticated .main-content {
+    margin-left: 84px;
     padding: 96px 18px 22px;
   }
 }
@@ -22,10 +33,19 @@
   .main-content {
     padding: 88px 14px 18px;
   }
+
+  .app-authenticated .main-content {
+    margin-left: 64px;
+    padding: 84px 12px 18px;
+  }
 }
 
 @media (max-width: 480px) {
   .main-content {
     padding: 84px 10px 14px;
+  }
+
+  .app-authenticated .main-content {
+    padding: 80px 10px 14px;
   }
 }

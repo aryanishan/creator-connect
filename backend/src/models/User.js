@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema({
     maxlength: [200, 'Bio cannot exceed 200 characters'],
     default: ''
   },
+  tokens: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
   isVerified: {
     type: Boolean,
     default: false

@@ -23,8 +23,12 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState({ users: [], assets: [] });
+  const [tokenBalance, setTokenBalance] = useState(0);
   const searchRef = useRef(null);
   const searchInputRef = useRef(null);
+  const isWindowsClient =
+    typeof navigator !== 'undefined' &&
+    /win/i.test(navigator.userAgentData?.platform || navigator.platform || navigator.userAgent);
 
   const sidebarLinks = [
     { to: '/', label: 'Home', icon: FiHome, isActive: location.pathname === '/' },
@@ -82,6 +86,21 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const syncTokenBalance = async () => {
+      try {
+        const response = await api.get('/tokens/balance');
+        setTokenBalance(response?.data?.tokens ?? 0);
+      } catch (error) {
+        setTokenBalance(user?.tokens ?? 0);
+      }
+    };
+
+    syncTokenBalance();
+  }, [isAuthenticated, user?.tokens]);
+
   const openSearch = () => {
     setSearchOpen(true);
     setTimeout(() => searchInputRef.current?.focus(), 0);
@@ -125,6 +144,7 @@ const Navbar = () => {
               alt={user?.name}
               className="user-avatar"
             />
+            {isWindowsClient && <span className="user-tokens">{tokenBalance}</span>}
             <span className="user-name">{user?.name}</span>
           </div>
 

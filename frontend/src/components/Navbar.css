@@ -285,6 +285,17 @@
   white-space: nowrap;
 }
 
+.user-tokens {
+  color: #14361a;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid #8fe290;
+  background: #d8f7d8;
+  line-height: 1.1;
+}
+
 .logout-btn {
   border: none;
   border-radius: 11px;

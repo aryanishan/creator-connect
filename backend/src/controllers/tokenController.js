@@ -24,7 +24,9 @@ const getCashfreeCheckoutBaseUrl = () => {
     : 'https://sandbox.cashfree.com';
 };
 
-const isAutoSuccessEnabled = () => process.env.CASHFREE_AUTO_SUCCESS === 'true';
+const isAutoSuccessEnabled = () =>
+  process.env.NODE_ENV === 'development' && process.env.CASHFREE_AUTO_SUCCESS === 'true';
+const getCashfreeEnv = () => (process.env.CASHFREE_ENV || 'sandbox').toLowerCase();
 
 export const getTokenPlans = async (req, res) => {
   return res.json({ plans: getTokenPlanList() });
@@ -65,6 +67,7 @@ export const createTokenOrder = async (req, res) => {
         orderId,
         status: 'PAID',
         autoVerified: true,
+        cashfreeEnv: getCashfreeEnv(),
         alreadyCredited: creditResult.alreadyCredited,
         creditedTokens: totalTokens,
         plan: {
@@ -120,6 +123,7 @@ export const createTokenOrder = async (req, res) => {
       cfOrderId: cfOrder.cf_order_id,
       paymentSessionId,
       paymentLink,
+      cashfreeEnv: getCashfreeEnv(),
       plan: {
         id: plan.id,
         amount: plan.amount,

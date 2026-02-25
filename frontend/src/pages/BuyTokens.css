@@ -85,6 +85,16 @@
   font-size: 0.95rem;
 }
 
+.gateway-note {
+  background: #eef6ff;
+  color: #1e4f82;
+  border: 1px solid #c9ddf3;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
 .popular {
   border-color: var(--mint-300);
   background: linear-gradient(180deg, #fafcf9 0%, var(--mint-50) 100%);

@@ -33,11 +33,12 @@ const loadCashfreeSdk = () =>
 const BuyTokens = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user } = useAuth();
+  const { user, fetchUser } = useAuth();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [buyingPlanId, setBuyingPlanId] = useState(null);
   const [error, setError] = useState(null);
+  const [gatewayNote, setGatewayNote] = useState('');
   const [verifyingPayment, setVerifyingPayment] = useState(false);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const BuyTokens = () => {
     try {
       setLoading(true);
       setError(null);
+      setGatewayNote('');
       const response = await API.get('/tokens/plans');
       setPlans(response.data.plans);
     } catch (err) {
@@ -73,8 +75,9 @@ const BuyTokens = () => {
 
       if (response.data.status === 'PAID') {
         // Payment successful
+        await fetchUser();
         alert(`Payment successful! You have received ${response.data.creditedTokens} tokens.`);
-        navigate('/dashboard');
+        navigate('/');
       } else if (response.data.status === 'PENDING') {
         setError('Payment is still being processed. Please wait a moment and refresh.');
         setTimeout(() => verifyPayment(orderId), 3000);
@@ -100,6 +103,7 @@ const BuyTokens = () => {
     try {
       setBuyingPlanId(planId);
       setError(null);
+      setGatewayNote('');
 
       const customerPhone = user.phone || '9999999999';
 
@@ -112,12 +116,11 @@ const BuyTokens = () => {
 
       console.log('Token order response:', response.data);
 
-      const { paymentSessionId, paymentLink, autoVerified, status, creditedTokens } = response.data;
+      const { paymentSessionId, paymentLink, cashfreeEnv } = response.data;
+      const mode = (cashfreeEnv || process.env.REACT_APP_CASHFREE_ENV || 'sandbox').toLowerCase();
 
-      if (autoVerified || status === 'PAID') {
-        alert(`Payment successful! You have received ${creditedTokens} tokens.`);
-        navigate('/dashboard');
-        return;
+      if (mode === 'sandbox') {
+        setGatewayNote('Sandbox mode: use testsuccess@gocash (success) or testfailure@gocash (failure).');
       }
 
       if (!paymentSessionId && !paymentLink) {
@@ -131,7 +134,6 @@ const BuyTokens = () => {
           throw new Error('Cashfree SDK unavailable');
         }
 
-        const mode = (process.env.REACT_APP_CASHFREE_ENV || 'sandbox').toLowerCase();
         const cashfree = Cashfree({ mode: mode === 'production' ? 'production' : 'sandbox' });
 
         console.log('Opening Cashfree SDK checkout with session:', paymentSessionId);
@@ -181,6 +183,7 @@ const BuyTokens = () => {
             {error}
           </div>
         )}
+        {gatewayNote && <p className="gateway-note">{gatewayNote}</p>}
 
         {plans.length === 0 ? (
           <p>No token plans available. Please try again later.</p>

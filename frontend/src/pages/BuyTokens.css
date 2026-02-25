@@ -85,6 +85,16 @@
   font-size: 0.95rem;
 }
 
+.success-message {
+  background-color: #dff6e4;
+  color: #155724;
+  border: 1px solid #b7e4c4;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
 .gateway-note {
   background: #eef6ff;
   color: #1e4f82;

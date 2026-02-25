@@ -39,6 +39,7 @@ const BuyTokens = () => {
   const [buyingPlanId, setBuyingPlanId] = useState(null);
   const [error, setError] = useState(null);
   const [gatewayNote, setGatewayNote] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [verifyingPayment, setVerifyingPayment] = useState(false);
 
   useEffect(() => {
@@ -56,6 +57,7 @@ const BuyTokens = () => {
       setLoading(true);
       setError(null);
       setGatewayNote('');
+      setSuccessMessage('');
       const response = await API.get('/tokens/plans');
       setPlans(response.data.plans);
     } catch (err) {
@@ -70,14 +72,16 @@ const BuyTokens = () => {
     try {
       setVerifyingPayment(true);
       setError(null);
+      setSuccessMessage('');
 
       const response = await API.get(`/tokens/orders/${orderId}/verify`);
 
       if (response.data.status === 'PAID') {
-        // Payment successful
         await fetchUser();
-        alert(`Payment successful! You have received ${response.data.creditedTokens} tokens.`);
-        navigate('/');
+        const creditedTokens = response.data.creditedTokens || 0;
+        setSuccessMessage(`Payment successful! You received ${creditedTokens} tokens.`);
+        window.history.replaceState({}, '', '/tokens/buy');
+        fetchPlans();
       } else if (response.data.status === 'PENDING') {
         setError('Payment is still being processed. Please wait a moment and refresh.');
         setTimeout(() => verifyPayment(orderId), 3000);
@@ -104,6 +108,7 @@ const BuyTokens = () => {
       setBuyingPlanId(planId);
       setError(null);
       setGatewayNote('');
+      setSuccessMessage('');
 
       const customerPhone = user.phone || '9999999999';
 
@@ -183,6 +188,7 @@ const BuyTokens = () => {
             {error}
           </div>
         )}
+        {successMessage && <div className="success-message">{successMessage}</div>}
         {gatewayNote && <p className="gateway-note">{gatewayNote}</p>}
 
         {plans.length === 0 ? (
